@@ -1,12 +1,44 @@
 let canvas = document.querySelector("canvas"),
     ctx     = canvas.getContext('2d'),
  	w = window.innerWidth,
-    h = window.innerHeight
+    h = window.innerHeight,
+    gravity = 1,
+    friction = 0.6,
+    interract = false,
+    gravitation = false,
+    buttonGravity = document.querySelector('#gravity')
+    buttonInterract = document.querySelector('#interract')
+    buttonRestart = document.querySelector('#restart')
+
 
 canvas.width = w
 canvas.height = h
 
-// Animation
+window.addEventListener('resize', function () {
+	canvas.width = w
+	canvas.height = h
+
+	init()
+})
+
+buttonGravity.addEventListener('click', function (event) {
+	event.preventDefault()
+
+	gravitation = !gravitation
+})
+
+buttonInterract.addEventListener('click', function (event) {
+	event.preventDefault()
+
+	interract = !interract
+})
+
+
+buttonRestart.addEventListener('click', function (event) {
+	event.preventDefault()
+
+	init()
+})
 
 let mouse = {
 	x: undefined,
@@ -18,14 +50,7 @@ window.addEventListener('mousemove', function (event) {
 	mouse.y = event.y
 })
 
-window.addEventListener('resize', function () {
-	canvas.width = w
-	canvas.height = h
-
-	init()
-})
-
-function Circle(x, y, r, dx, dy, redc, greenc, bluec, op, fill) {
+function Ball(x, y, r, dx, dy, redc, greenc, bluec, op, fill) {
 	this.x = x
 	this.y = y
 	this.r = r
@@ -59,99 +84,72 @@ function Circle(x, y, r, dx, dy, redc, greenc, bluec, op, fill) {
 
 		// Interractive
 
-		if (mouse.x - this.x < r && mouse.x - this.x > -r && mouse.y - this.y < r && mouse.y - this.y > -r) {
-			this.r += 3
-		}else if (this.r > r){
-			this.r -= 3 
+		if (interract) {
+			this.interractivity()
 		}
+
+		// Gravity
+
+		if (gravitation) {
+			if(this.y + this.r + this.dy > h) {
+				this.dy = -this.dy * friction
+			}else {
+				this.dy += gravity
+			}
+			this.y += this.dy
+		}
+
+		// draw function to update
 
 		this.draw()
 	}
+
+	this.interractivity = function interractivity() {
+		if (mouse.x - this.x < r + 20 && mouse.x - this.x > -r - 20 && mouse.y - this.y < r + 20 && mouse.y - this.y > -r - 20) {
+			this.r += 3
+		}else if (this.r > r || this.r >= 200){
+			this.r -= 3 
+		}
+	}
 }
 
-let	circleArray = []
+let	ballArray = []
 
 function init() {
-	circleArray = []
+	ballArray = []
 
-	for (let i = 0; i < 30; i++) {
-		let  r = 20 + Math.random() * 50,
+	for (let i = 0; i < 100; i++) {
+		let  r = 20 + Math.random() * 40,
 			 x = Math.random() * (w - r * 2) + r,
 			 y = Math.random() * (h - r * 2) + r,
+			 yG = Math.random() * (h / 2 - r * 2) + r,
 			 redc = 100 + Math.random() * 60,
 			 greenc = 100 + Math.random() * 60,
 			 bluec = 100 + Math.random() * 155,
 			 op = Math.random(),
 			 dx = (Math.random() - 0.5) * 2,
 			 dy = (Math.random() - 0.5) * 2,
-			 dr = (Math.random() - 0.5) * 2,
+			 dyG = r * Math.random() / 4,
 			 fill = Math.round(Math.random())
 
-		circleArray.push(new Circle(x, y, r, dx, dy, redc, greenc, bluec, op, fill))
+		ballArray.push(new Ball(x, y, r, dx, dy, redc, greenc, bluec, op, fill))
+		
+		if (gravitation) {
+			ballArray.push(new Ball(x, yG, r, dx, dyG, redc, greenc, bluec, op, fill))
+		}
 	}
 	
 }
 
 init()
 
-console.log(circleArray)
-
 function animate() {
 	requestAnimationFrame(animate)
 	ctx.clearRect(0, 0, w, h)
 
-	for (let i = 0; i < circleArray.length; i++) {
-		circleArray[i].update()
+	for (var i = 0; i < ballArray.length; i++) {
+		ballArray[i].update()
 	}
 }
 
 animate()
-
-
-
-
-
-
-
-
-
-
-
-
-// Rectangles
-
-// ctx.fillStyle = '#5794e5'
-// ctx.fillRect(100, 200, 600, 800)
-
-
-// Lines
-
-// ctx.beginPath()
-// ctx.moveTo(100, 50)
-// ctx.lineTo(400, 500)
-// ctx.lineTo(700, 200)
-// ctx.strokeStyle = '#2d2d2d'
-// ctx.stroke()
-
-
-// Arc
-
-//  Background
-
-// for (let i = 0; i < 70; i++) {
-	
-// 	let x = Math.random() * w,
-// 		y = Math.random() * h,
-// 		r = Math.random() * 100,
-// 		redc = Math.random() * 160,
-// 		greenc = Math.random() * 160,
-// 		bluec = Math.random() * 255,
-// 		op = Math.random()
-
-// 	ctx.beginPath()
-// 	ctx.strokeStyle = `rgba(${redc}, ${greenc}, ${bluec}, ${op})`
-// 	ctx.fillStyle = `rgba(${redc}, ${greenc}, ${bluec}, ${op})`
-// 	ctx.arc(x, y, r, Math.PI * 2, false)
-// 	ctx.fill()
-// 	ctx.stroke()
-// }
