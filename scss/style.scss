@@ -1,0 +1,109 @@
+// Variables
+
+$mainColor: #a14ad3;
+
+// Canvas
+
+canvas {
+	background-color: #383838;
+}
+
+// Other styles
+
+body {
+	margin: 0;
+	padding: 0;
+
+	overflow: hidden;
+}
+.header {
+	width: 70%;
+	height: 64px;
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	z-index: 10;
+	top: 100px;
+	left: 15%;
+}
+
+// Buttons
+
+.button {
+	position: relative;
+	display: inline-block;
+	padding: 15px 30px;
+	overflow: hidden;
+
+	color: $mainColor;
+	font-weight: 700;
+	font-family: "Consolas";
+	text-decoration: none;
+	font-size: 30px;
+	letter-spacing: .4em;
+	text-transform: uppercase;
+
+	transition: .2s;
+	&:hover {
+		box-shadow: 0 0 10px $mainColor,  0 0 40px $mainColor,  0 0 80px $mainColor;
+		background-color: $mainColor;
+
+		color: #383838;
+
+		transition-delay: .6s
+	}
+	&:hover &__line--top {
+		left: 100%;
+
+		transition: 1s;
+		transition-delay: .25s;
+	}
+	&:hover &__line--right {
+		top: 100%;
+
+		transition: 1s;
+	}
+	&:hover &__line--bottom {
+		right: 100%;
+
+		transition: 1s;
+		transition-delay: .25s;
+	}
+	&:hover &__line--left {
+		bottom: 100%;
+
+		transition: 1s;
+	}
+	&__line {
+		display: block;
+		position: absolute;
+		&--top {
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 2px;
+			background: linear-gradient(90deg, transparent, $mainColor);
+		}
+		&--right {
+			top: -100%;
+			right: 0;
+			width: 2px;
+			height: 100%;
+			background: linear-gradient(180deg, transparent, $mainColor);
+		}
+		&--bottom {
+			bottom: 0;
+			right: -100%;
+			width: 100%;
+			height: 2px;
+			background: linear-gradient(270deg, transparent, $mainColor);
+		}
+		&--left {
+			bottom: -100%;
+			left: 0;
+			width: 2px;
+			height: 100%;
+			background: linear-gradient(0deg, transparent, $mainColor);
+		}
+	}
+}
