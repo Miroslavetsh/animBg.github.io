@@ -8,7 +8,6 @@ let canvas = document.querySelector("canvas"),
     gravitation = false,
     buttonGravity = document.querySelector('#gravity')
     buttonInterract = document.querySelector('#interract')
-    buttonRestart = document.querySelector('#restart')
 
 
 canvas.width = w
@@ -31,13 +30,6 @@ buttonInterract.addEventListener('click', function (event) {
 	event.preventDefault()
 
 	interract = !interract
-})
-
-
-buttonRestart.addEventListener('click', function (event) {
-	event.preventDefault()
-
-	init()
 })
 
 let mouse = {
